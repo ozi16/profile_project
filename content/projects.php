@@ -7,9 +7,14 @@
 
 
     <div class="border-t mt-5 border-gray-300">
-        <section class="lg:mb-20">
+        <section class="border lg:mb-20 grid gap-6 px-4 py-8">
             <ul class="grid gap-8 sm:grid-cols-2">
-                <li class="rounded-md bg-transparent shadow-lg transition-transform duration-200 lg:hover:scale[1.03]"></li>
+                <li class="rounded-md bg-transparent shadow-lg transition-transform duration-200 lg:hover:scale[1.03]">
+                    <a href="">
+                        <img src="" alt="">
+
+                    </a>
+                </li>
             </ul>
         </section>
     </div>

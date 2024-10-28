@@ -38,7 +38,7 @@
       case 'blog':
         echo include 'content/blog';
         break;
-      case 'contact':
+      case 'contact': 
         echo include 'content/contact';
     }
     ?>

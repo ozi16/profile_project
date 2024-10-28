@@ -1,43 +1,39 @@
 <?php
-
 session_start();
 include 'koneksi.php';
 
-if (isset($_POST['login'])) {
-    $email = $_POST['email']; // untuk mengambil nilai dari input
-    $password = $_POST['password'];
+// memeriksa apakah input orm ada sebelum menggunakan
+$username = isset($_POST['username']) ? $_POST['username'] : '';
+$email = isset($_POST['email']) ? $_POST['email'] : '';
+$password = isset($_POST['password']) ? password_hash($_POST['password'], PASSWORD_BCRYPT) : '';
 
-    $queryLogin = mysqli_query($koneksi, "SELECT * FROM user WHERE email = '$email'");
-    // mysqli_num_row() : untuk melihat total data didalam table
-    if (mysqli_num_rows($queryLogin) > 0) {
-        $rowLogin = mysqli_fetch_assoc($queryLogin);
-        // verifikasi password (gunakan password_verify jika password di hash)
-        if (password_verify($password, $rowLogin['password'])) {
-            $_SESSION['username'] = $rowLogin['username'];
-            $_SESSION['id'] = $rowLogin['id'];
-            header("location:index.php");
-        } else {
-            // jika password salah
-            header("location:login.php?login=gagal");
-        }
-    } else {
-        // jika email tidak ditemukan
-        header("location:login.php?login=gagal");
+if (!empty($username) && !empty($email) && !empty($password)) {
+    $stmt = $koneksi->prepare("INSERT INTO user(username,email,password) VALUES (?,?,?)");
+    $stmt->bind_param("sss", $username, $email, $password);
+
+    // eksekusi dan check
+    if ($stmt->execute() === TRUE) {
+        echo "Registrasi succes";
+        header("location:index.php");
         exit();
+    } else {
+        echo "Error: " . $stmt->error;
     }
+    $stmt->close();
+} else {
+    echo "please fill in all fields";
 }
 
 
+
 ?>
-
-
 <!DOCTYPE html>
 <html :class="{ 'theme-dark': dark }" x-data="data()" lang="en">
 
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Login - Windmill Dashboard</title>
+    <title>Create account - Windmill Dashboard</title>
     <link
         href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
         rel="stylesheet" />
@@ -57,43 +53,53 @@ if (isset($_POST['login'])) {
                     <img
                         aria-hidden="true"
                         class="object-cover w-full h-full dark:hidden"
-                        src="assets/windmill-dashboard/public/assets/img/login-office.jpeg"
+                        src="assets/windmill-dashboard/public/assets/img/create-account-office.jpeg"
                         alt="Office" />
                     <img
                         aria-hidden="true"
                         class="hidden object-cover w-full h-full dark:block"
-                        src="assets/windmill-dashboard/public/assets/img/login-office-dark.jpeg"
+                        src="assets/windmill-dashboard/public/assets/img/create-account-office-dark.jpeg"
                         alt="Office" />
                 </div>
                 <div class="flex items-center justify-center p-6 sm:p-12 md:w-1/2">
                     <div class="w-full">
                         <h1
                             class="mb-4 text-xl font-semibold text-gray-700 dark:text-gray-200">
-                            Login
+                            Create account
                         </h1>
-                        <form action="login.php" method="post">
-
+                        <form action="register.php" method="post">
                             <label class="block text-sm">
-                                <span class="text-gray-700 dark:text-gray-400" name="email">Email</span>
+                                <span class="text-gray-700 dark:text-gray-400">username</span>
                                 <input
                                     class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
-                                    placeholder="Jane Doe" />
+                                    name="username"
+                                    value="" required>
+
                             </label>
                             <label class="block mt-4 text-sm">
-                                <span class="text-gray-700 dark:text-gray-400" name="password">Password</span>
+                                <span class="text-gray-700 dark:text-gray-400">Email</span>
+                                <input
+                                    class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
+                                    name="email"
+                                    value="" required>
+
+                            </label>
+                            <label class="block mt-4 text-sm">
+                                <span class="text-gray-700 dark:text-gray-400">Password</span>
                                 <input
                                     class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
                                     placeholder="***************"
-                                    type="password" name="password" />
-                            </label>
-                        </form>
+                                    type="password" name="password" id="" required />
 
-                        <!-- You should use a button here, as the anchor is only used for the example  -->
-                        <a
-                            class="block w-full px-4 py-2 mt-4 text-sm font-medium leading-5 text-center text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple"
-                            href="index.php">
-                            Log in
-                        </a>
+                            </label>
+
+                            <!-- You should use a button here, as the anchor is only used for the example  -->
+                            <button
+                                class="block w-full px-4 py-2 mt-4 text-sm font-medium leading-5 text-center text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple"
+                                href="index.php" name="register">
+                                Create account
+                            </button>
+                        </form>
 
                         <hr class="my-8" />
 

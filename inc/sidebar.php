@@ -11,12 +11,13 @@ $rowUser = mysqli_fetch_assoc($queryUser);
             <img
                 src="admin/upload/<?php echo $rowUser['foto'] ?>"
                 alt="Profile"
-                class="rounded-full object-cover w-16 h-16 " />
+                class="rounded-full object-cover w-10 h-10 " />
             <div>
                 <h2 class="font-bold text-xl"><?php echo $rowUser['username'] ?></h2>
-                <p class="text-sm text-gray-500"></p>
+                <p class="text-sm text-gray-500"><?php echo $rowUser['pekerjaan'] ?></p>
             </div>
         </div>
+
 
         <div class="border-dashed my-8 border-b border-gray-300 dark:border-neutral-700"></div>
 
@@ -56,7 +57,6 @@ $rowUser = mysqli_fetch_assoc($queryUser);
                 </a>
             </div>
             <div class="primary hover:scale-[1.08] rounded-md  items-center gap-4 w-fit px-4 py-3  font-bold hover:bg-gradient-to-r from-green-400 to-cyan-400 w-full">
-
                 <a
                     href="?page=blog"
                     class="flex gap-4">
@@ -71,7 +71,7 @@ $rowUser = mysqli_fetch_assoc($queryUser);
             </div>
             <div class="primary hover:scale-[1.08] rounded-md  items-center gap-4 w-fit px-4 py-3  font-bold hover:bg-gradient-to-r from-green-400 to-cyan-400 w-full">
                 <a
-                    href="#"
+                    href="?page=contact"
                     class="flex gap-4">
                     <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 512 512" height="24" width="24" xmlns="http://www.w3.org/2000/svg">
                         <path d="M440 6.5L24 246.4c-34.4 19.9-31.1 70.8 5.7 85.9L144 379.6V464c0 46.4 59.2 65.5 86.6 28.6l43.8-59.1 111.9 46.2c5.9 2.4 12.1 3.6 18.3 3.6 8.2 0 16.3-2.1 23.6-6.2 12.8-7.2 21.6-20 23.9-34.5l59.4-387.2c6.1-40.1-36.9-68.8-71.5-48.9zM192 464v-64.6l36.6 15.1L192 464zm212.6-28.7l-153.8-63.5L391 169.5c10.7-15.5-9.5-33.5-23.7-21.2L155.8 332.6 48 288 464 48l-59.4 387.3z"></path>
@@ -79,7 +79,6 @@ $rowUser = mysqli_fetch_assoc($queryUser);
                     Contact
                 </a>
             </div>
-
         </nav>
     </div>
 </div>

@@ -46,7 +46,7 @@ if (isset($_GET['delete'])) {
                 <div class="container px-6 mx-auto grid">
                     <h2
                         class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">
-                        Dashboard
+                        Projects
                     </h2>
 
 
@@ -76,10 +76,8 @@ if (isset($_GET['delete'])) {
                                             <td class="px-4 py-3">
                                                 <div class="flex items-center text-sm">
                                                     <!-- Avatar with inset shadow -->
-
                                                     <div>
                                                         <p class="font-semibold"><?php echo $row['nama_prj']  ?></p>
-
                                                     </div>
                                                 </div>
                                             </td>

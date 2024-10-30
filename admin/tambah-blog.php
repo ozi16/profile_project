@@ -3,9 +3,11 @@ session_start();
 include 'koneksi.php';
 // jika button simpan di tekan
 if (isset($_POST['simpan'])) {
-    $nama     = $_POST['nama'];
+    $judul     = $_POST['judul'];
+    $tanggal     = $_POST['tanggal'];
     $keterangan    = $_POST['keterangan'];
-    $link = $_POST['link'];
+    $link    = $_POST['link'];
+
 
     // $_POST: form input name=''
     // $_GET : url ?param='nilai'
@@ -26,29 +28,30 @@ if (isset($_POST['simpan'])) {
             // pindahkan gambar dari tmp folder ke folder yang sudah kita buat
             move_uploaded_file($_FILES['foto']['tmp_name'], 'upload/' . $nama_foto);
 
-            $insert = mysqli_query($koneksi, "INSERT INTO projects (nama_prj, keterangan, website_link, foto)
-            VALUES ('$nama','$keterangan','$link','$nama_foto')");
+            $insert = mysqli_query($koneksi, "INSERT INTO blogs (judul, tanggal, keterangan, foto, link)
+            VALUES ('$judul','$tanggal','$keterangan','$nama_foto','$link')");
         }
     } else {
-
-        $insert = mysqli_query($koneksi, "INSERT INTO projects (nama_prj, keterangan, website_link)
-            VALUES ('$nama','$keterangan','$link')");
+        $insert = mysqli_query($koneksi, "INSERT INTO blogs (judul, tanggal, keterangan, foto, link) VALUES ('$judul','$tanggal','$keterangan')");
     }
 
-    header("location:projects.php?tambah=berhasil");
+    header("location:blogs.php?tambah=berhasil");
 }
 
 $id  = isset($_GET['edit']) ? $_GET['edit'] : '';
-$queryProject = mysqli_query($koneksi, "SELECT * FROM projects WHERE id ='$id'");
-$rowProject   = mysqli_fetch_assoc($queryProject);
+$queryBlog = mysqli_query($koneksi, "SELECT * FROM blogs WHERE id ='$id'");
+$rowBlog   = mysqli_fetch_assoc($queryBlog);
+$tanggal = date("d M Y", strtotime($rowBlog['tanggal']));
 
 
 // jika button edit di klik
 
 if (isset($_POST['edit'])) {
-    $nama   = $_POST['nama'];
-    $keterangan  = $_POST['keterangan'];
-    $link = $_POST['link'];
+    $judul     = $_POST['nama'];
+    $tanggal     = $_POST['tanggal'];
+    $keterangan    = $_POST['keterangan'];
+    $link    = $_POST['link'];
+
 
     // jika password di isi sama user
 
@@ -66,18 +69,18 @@ if (isset($_POST['edit'])) {
             echo "Ext tidak ditemukan";
             die;
         } else {
-            unlink('upload/' . $rowProject['foto']);
+            unlink('upload/' . $rowBlog['foto']);
             // pindahkan gambar dari tmp folder ke folder yang sudah kita buat
             move_uploaded_file($_FILES['foto']['tmp_name'], 'upload/' . $nama_foto);
 
-            $insert = mysqli_query($koneksi, "UPDATE projects SET nama_prj='$nama', keterangan='$keterangan', website_link='$link', foto='$nama_foto' WHERE id='$id'");
+            $insert = mysqli_query($koneksi, "UPDATE projects SET judul='$nama', keterangan='$keterangan', link='$link', foto='$nama_foto' WHERE id='$id'");
         }
     } else {
 
-        $insert = mysqli_query($koneksi, "UPDATE projects SET nama_prj='$nama', nama_prj='$nama', keterangan='$keterangan', website_link='$link' WHERE id='$id'");
+        $insert = mysqli_query($koneksi, "UPDATE projects SET judul='$nama', keterangan='$keterangan', link='$link' WHERE id='$id'");
     }
 
-    $update = mysqli_query($koneksi, "UPDATE projects SET nama_prj='$nama', keterangan='$keterangan', website_link ='$link' WHERE id='$id'");
+    $update = mysqli_query($koneksi, "UPDATE projects SET judul='$nama', keterangan='$keterangan', link ='$link' WHERE id='$id'");
     header("location:projects.php?ubah=berhasil");
 }
 ?>
@@ -89,7 +92,7 @@ if (isset($_POST['edit'])) {
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Tambah Projects</title>
+    <title>Tambah Blogs</title>
 
     <?php include 'inc-admin/head.php' ?>
 </head>
@@ -112,7 +115,7 @@ if (isset($_POST['edit'])) {
                 <div class="container px-6 mx-auto grid">
                     <h2
                         class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">
-                        <?php echo isset($_GET['edit']) ? 'Edit' : 'Tambah' ?> User
+                        <?php echo isset($_GET['edit']) ? 'Edit' : 'Tambah' ?> Blog
                     </h2>
 
 
@@ -128,7 +131,18 @@ if (isset($_POST['edit'])) {
                                     name="nama"
                                     class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
                                     placeholder="masukan Nama anda"
-                                    value="<?php echo isset($_GET['edit']) ? $rowProject['nama_prj'] : '' ?>" />
+                                    value="<?php echo isset($_GET['edit']) ? $rowBlog['judul'] : '' ?>" />
+                            </label>
+
+                            <label class="block text-sm mt-4">
+                                <span class="text-gray-700 dark:text-gray-400">tanggal</span>
+                                <input
+                                    name="tanggal"
+                                    class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
+                                    placeholder="masukan nama anda"
+                                    type="date"
+                                    required
+                                    value="<?php echo isset($_GET['edit']) ? $rowBlog['tanggal'] : '' ?>" />
                             </label>
 
                             <label class="block text-sm mt-4">
@@ -136,18 +150,17 @@ if (isset($_POST['edit'])) {
                                 <input
                                     name="keterangan"
                                     class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
-                                    placeholder="masukan nama anda"
-                                    value="<?php echo isset($_GET['edit']) ? $rowProject['keterangan'] : '' ?>" />
+                                    placeholder="masukan keterangan blog anda"
+                                    value="<?php echo isset($_GET['edit']) ? $rowBlog['keterangan'] : '' ?>" />
                             </label>
 
                             <label class="block text-sm mt-4">
-                                <span class="text-gray-700 dark:text-gray-400">website link</span>
+                                <span class="text-gray-700 dark:text-gray-400">website</span>
                                 <input
                                     name="link"
                                     class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
-                                    placeholder="masukan Password anda"
-                                    value="<?php echo isset($_GET['edit']) ? $rowProject['website_link'] : '' ?>" />
-
+                                    placeholder="masukan keterangan blog anda"
+                                    value="<?php echo isset($_GET['edit']) ? $rowBlog['link'] : '' ?>" />
                             </label>
 
                             <label class="block text-sm mt-4">

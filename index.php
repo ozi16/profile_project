@@ -36,10 +36,10 @@
         echo include 'content/projects.php';
         break;
       case 'blog':
-        echo include 'content/blog';
+        echo include 'content/blog.php';
         break;
-      case 'contact': 
-        echo include 'content/contact';
+      case 'contact':
+        echo include 'content/contact.php';
     }
     ?>
 

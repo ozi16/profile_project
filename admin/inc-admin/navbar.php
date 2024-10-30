@@ -1,3 +1,11 @@
+<?php
+include 'koneksi.php';
+$queryUser = mysqli_query($koneksi, "SELECT * FROM user ORDER BY id DESC");
+$rowUser = mysqli_fetch_assoc($queryUser);
+?>
+
+
+
 <header class="z-10 py-4 bg-white shadow-md dark:bg-gray-800">
     <div
         class="container flex items-center justify-between h-full px-6 mx-auto text-purple-600 dark:text-purple-300">
@@ -142,9 +150,10 @@
                     aria-haspopup="true">
                     <img
                         class="object-cover w-8 h-8 rounded-full"
-                        src="https://images.unsplash.com/photo-1502378735452-bc7d86632805?ixlib=rb-0.3.5&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=200&fit=max&s=aa3a807e1bbdfd4364d1f449eaa96d82"
+                        src="upload/<?php echo $rowUser['foto'] ?>"
                         alt=""
                         aria-hidden="true" />
+
                 </button>
                 <template x-if="isProfileMenuOpen">
                     <ul

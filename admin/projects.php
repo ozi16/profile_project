@@ -4,7 +4,7 @@ session_start();
 include 'koneksi.php';
 
 // munculkan / pilih sebuah atau semua kolom dari table user
-$queryUserAdmin = mysqli_query($koneksi, "SELECT * FROM user");
+$queryProjects = mysqli_query($koneksi, "SELECT * FROM projects");
 // mysqli_fetch_assoc($query) = untuk menjadikan hasil query menjadi sebuah data (object,array)
 
 // jika parameternya ada ?delete=nilai param
@@ -12,8 +12,8 @@ if (isset($_GET['delete'])) {
     $id = $_GET['delete']; //mengambil nilai params
 
     // query / perintah hapus
-    $delete = mysqli_query($koneksi, "DELETE FROM user  WHERE id ='$id'");
-    header("location:user.php?hapus=berhasil");
+    $delete = mysqli_query($koneksi, "DELETE FROM projects  WHERE id ='$id'");
+    header("location:projects.php?hapus=berhasil");
 }
 ?>
 
@@ -23,7 +23,7 @@ if (isset($_GET['delete'])) {
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Windmill Dashboard</title>
+    <title>projects</title>
 
     <?php include 'inc-admin/head.php' ?>
 </head>
@@ -51,11 +51,8 @@ if (isset($_GET['delete'])) {
 
 
                     <!-- With actions -->
-                    <h4
-                        class="mb-4 text-lg font-semibold text-gray-600 dark:text-gray-300">
-                        Table with actions
-                    </h4>
-                    <a href="tambah-user.php" class="items-center text-center text-sm  py-2 bg-purple-600 mt-4 text-white font-medium border rounded-lg hover:bg-purple-700 ">
+
+                    <a href="tambah-projects.php" class=" items-center text-center text-sm  py-2 bg-purple-600 mt-4 text-white font-medium border rounded-lg hover:bg-purple-700 ">
                         Tambah
                     </a>
                     <div class="w-full overflow-hidden rounded-lg shadow-xs">
@@ -64,56 +61,46 @@ if (isset($_GET['delete'])) {
                                 <thead>
                                     <tr
                                         class="text-xs font-semibold tracking-wide text-left text-gray-500 uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-400 dark:bg-gray-800">
-                                        <th class="px-4 py-3">Nama</th>
-                                        <th class="px-4 py-3">Email</th>
+                                        <th class="px-4 py-3">Judul</th>
+                                        <th class="px-4 py-3">Keterangan</th>
+                                        <th class="px-4 py-3">Website Link</th>
                                         <th class="px-4 py-3">Foto</th>
-                                        <th class="px-4 py-3">Pekerjaan</th>
-                                        <th class="px-4 py-3">Actions</th>
+                                        <th class="px-4 py-3">action</th>
                                     </tr>
                                 </thead>
                                 <tbody
                                     class="bg-white divide-y dark:divide-gray-700 dark:bg-gray-800">
-                                    <?php while ($row = mysqli_fetch_assoc($queryUserAdmin)) { ?>
+                                    <?php while ($row = mysqli_fetch_assoc($queryProjects)) { ?>
                                         <tr class="text-gray-700 dark:text-gray-400">
+                                            <!-- judul -->
                                             <td class="px-4 py-3">
                                                 <div class="flex items-center text-sm">
                                                     <!-- Avatar with inset shadow -->
-                                                    <div
-                                                        class="relative hidden w-8 h-8 mr-3 rounded-full md:block">
-                                                        <img
-                                                            class="object-cover w-full h-full rounded-full"
-                                                            src="upload/<?php echo $row['foto'] ?>"
-                                                            alt=""
-                                                            loading="lazy" />
-                                                        <div
-                                                            class="absolute inset-0 rounded-full shadow-inner"
-                                                            aria-hidden="true"></div>
-                                                    </div>
+
                                                     <div>
-                                                        <p class="font-semibold"><?php echo $row['username']  ?></p>
-                                                        <p class="text-xs text-gray-600 dark:text-gray-400">
-                                                            10x Developer
-                                                        </p>
+                                                        <p class="font-semibold"><?php echo $row['nama_prj']  ?></p>
+
                                                     </div>
                                                 </div>
                                             </td>
-
+                                            <!-- keterangan -->
                                             <td class="px-4 py-3 text-sm">
-                                                <?php echo $row['email'] ?>
+                                                <?php echo $row['keterangan'] ?>
                                             </td>
-
-                                            <td class="">
-                                                <img width="100px" style="border: solid 1px black; border-radius: 12px;" src="upload/<?php echo $row['foto'] ?>" alt="">
-                                            </td>
-
                                             <td class="px-4 py-3 text-sm">
-                                                <?php echo $row['pekerjaan'] ?>
+                                                <?php echo $row['website_link'] ?>
                                             </td>
+                                            <!-- foto -->
+                                            <td class="px-4 py-3 text-sm">
+                                                <img src="upload/<?php echo $row['foto'] ?>" width="70" alt="">
+                                            </td>
+
+
 
                                             <td class="px-4 py-3">
                                                 <div class="flex items-center space-x-4 text-sm">
                                                     <a
-                                                        href="tambah-user.php?edit=<?php echo $row['id'] ?>"
+                                                        href="tambah-projects.php?edit=<?php echo $row['id'] ?>"
                                                         class="flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-purple-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray"
                                                         aria-label="Edit">
                                                         <svg
@@ -126,7 +113,7 @@ if (isset($_GET['delete'])) {
                                                         </svg>
                                                     </a>
                                                     <a
-                                                        href="user.php?delete=<?php echo $row['id'] ?>"
+                                                        href="projects.php?delete=<?php echo $row['id'] ?>"
                                                         onclick="return confirm('Apakah anda yakin akan menhapus data ini?')"
                                                         class="flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-purple-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray"
                                                         aria-label="Delete">

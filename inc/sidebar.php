@@ -1,14 +1,20 @@
+<?php
+include 'admin/koneksi.php';
+$queryUser = mysqli_query($koneksi, "SELECT * FROM user ORDER BY id DESC");
+$rowUser = mysqli_fetch_assoc($queryUser);
+?>
+
 <div class="hidden rounded md:flex md:col-span-1 lg:col-span-1 bg-white shadow-lg p-4 sticky top-0 glow fixed ">
 
     <div class="space-y-6 fixed ">
         <div class="flex items-center space-x-3 mb-12">
             <img
-                src="https://via.placeholder.com/50"
+                src="admin/upload/<?php echo $rowUser['foto'] ?>"
                 alt="Profile"
-                class="rounded-full" />
+                class="rounded-full object-cover w-16 h-16 " />
             <div>
-                <h2 class="font-bold text-xl">ndrvndr</h2>
-                <p class="text-sm text-gray-500">Λ7214</p>
+                <h2 class="font-bold text-xl"><?php echo $rowUser['username'] ?></h2>
+                <p class="text-sm text-gray-500"></p>
             </div>
         </div>
 
@@ -52,7 +58,7 @@
             <div class="primary hover:scale-[1.08] rounded-md  items-center gap-4 w-fit px-4 py-3  font-bold hover:bg-gradient-to-r from-green-400 to-cyan-400 w-full">
 
                 <a
-                    href="#"
+                    href="?page=blog"
                     class="flex gap-4">
                     <svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" height="24" width="24" xmlns="http://www.w3.org/2000/svg">
                         <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
